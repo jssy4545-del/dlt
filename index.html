@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동해시 관광가이드 | 5대 권역 & 1박 2일 힐링 여행</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #13547a;
+            --primary-dark: #0c3852;
+            --accent: #2a9d8f;
+            --bg-soft: #f4f7f9;
+            --text-main: #1f2933;
+            --text-sub: #52606d;
+            --card-bg: #ffffff;
+            --border-light: #e4e7eb;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg-soft);
+            color: var(--text-main);
+            line-height: 1.65;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .brand {
+            font-weight: 900;
+            font-size: 1.15rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.92rem;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline { background: #fff; color: var(--text-main); border: 1px solid #cbd2d9; }
+        .btn-outline:hover { background: #f0f4f8; }
+
+        .hero {
+            background: linear-gradient(135deg, #0f3d5e 0%, #1b6ca8 55%, #2a9d8f 100%);
+            color: #fff;
+            padding: 64px 24px;
+            text-align: center;
+        }
+
+        .hero-inner { max-width: 860px; margin: 0 auto; }
+        .hero h1 { font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 900; margin-bottom: 14px; }
+        .hero p { font-size: 1.05rem; opacity: 0.94; margin-bottom: 24px; }
+
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.16);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: #fff;
+            color: var(--primary-dark);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 44px 20px; }
+
+        .section-head { margin-bottom: 24px; }
+        .section-head h2 { font-size: 1.6rem; font-weight: 900; color: var(--primary-dark); margin-bottom: 6px; }
+        .section-head p { color: var(--text-sub); font-size: 0.96rem; }
+
+        .region-banner {
+            background: #fff;
+            border-left: 5px solid var(--accent);
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .spots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 22px;
+        }
+
+        .spot-card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .spot-img-wrap {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background: #d9e2ec;
+            overflow: hidden;
+        }
+
+        .spot-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .spot-body { padding: 18px 20px; flex: 1; display: flex; flex-direction: column; }
+        .spot-region {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+        .spot-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
+        .spot-desc { font-size: 0.93rem; color: var(--text-sub); margin-bottom: 12px; flex: 1; }
+        .spot-tip {
+            background: #f0f7fa;
+            padding: 9px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #102a43;
+        }
+
+        .course-section { margin-top: 56px; }
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px; }
+        .course-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 22px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+        }
+        .course-card h3 { font-size: 1.2rem; color: var(--primary); margin-bottom: 14px; }
+        .course-step { padding: 10px 0; border-bottom: 1px dashed #e4e7eb; }
+        .course-step:last-child { border-bottom: none; }
+        .step-badge {
+            display: inline-block;
+            background: #e6f4f1;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.78rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-right: 6px;
+        }
+
+        .info-grid {
+            margin-top: 56px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 22px;
+        }
+        .info-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 22px;
+            border: 1px solid var(--border-light);
+        }
+        .info-box h3 { font-size: 1.15rem; color: var(--primary-dark); margin-bottom: 12px; }
+        .info-box ul { padding-left: 18px; color: var(--text-sub); font-size: 0.93rem; }
+        .info-box li { margin-bottom: 8px; }
+
+        footer {
+            margin-top: 60px;
+            background: #102a43;
+            color: #d9e2ec;
+            padding: 28px 20px;
+            text-align: center;
+            font-size: 0.88rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="#" class="brand">동해시 관광가이드</a>
+    <div class="nav-links">
+        <a href="#regions">5대 권역</a>
+        <a href="#courses">1박 2일 코스</a>
+        <a href="#tips">먹거리·여행 팁</a>
+        <button class="btn btn-outline" id="sourceToggleBtn" onclick="toggleImageSource()">사진: 로컬 images/ 폴더</button>
+        <button class="btn btn-primary" onclick="downloadHtml()">index.html 저장</button>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="hero-inner">
+        <h1>산·계곡·바다·동굴이 어우러진 동해시</h1>
+        <p>추암·무릉·묵호·천곡·망상 5대 권역의 핵심 관광지와 1박 2일 힐링 여행 코스를 한눈에 둘러보세요.</p>
+        <div class="filter-bar" id="filterBar">
+            <button class="filter-btn active" data-region="all" onclick="selectRegion('all')">전체 보기</button>
+            <button class="filter-btn" data-region="chuam" onclick="selectRegion('chuam')">① 추암권역</button>
+            <button class="filter-btn" data-region="mureung" onclick="selectRegion('mureung')">② 무릉권역</button>
+            <button class="filter-btn" data-region="mukho" onclick="selectRegion('mukho')">③ 묵호권역</button>
+            <button class="filter-btn" data-region="cheongok" onclick="selectRegion('cheongok')">④ 천곡권역</button>
+            <button class="filter-btn" data-region="mangsang" onclick="selectRegion('mangsang')">⑤ 망상권역</button>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <section id="regions">
+        <div class="section-head">
+            <h2>동해시 5대 권역별 주요 관광지</h2>
+            <p>권역 버튼을 선택하면 해당 권역의 대표 명소와 여행 포인트를 볼 수 있습니다.</p>
+        </div>
+
+        <div class="region-banner" id="regionBanner">
+            <strong>전체 권역 안내:</strong> 남쪽의 추암 촛대바위와 서쪽의 무릉계곡·무릉별유천지, 중부의 묵호등대·도째비골 스카이밸리와 천곡황금박쥐동굴, 북쪽의 망상 해수욕장까지 권역 간 이동이 수월합니다.
+        </div>
+
+        <div class="spots-grid" id="spotsGrid"></div>
+    </section>
+
+    <section class="course-section" id="courses">
+        <div class="section-head">
+            <h2>추천 1박 2일 힐링 여행 코스</h2>
+            <p>해안선과 산·계곡·도심 명소를 균형 있게 담은 추천 일정입니다.</p>
+        </div>
+        <div class="course-grid">
+            <div class="course-card">
+                <h3>1일차: 바다와 감성 코스</h3>
+                <div class="course-step"><span class="step-badge">오전</span><strong>추암 촛대바위 & 출렁다리</strong> — 일출 감상과 해안 산책</div>
+                <div class="course-step"><span class="step-badge">점심</span><strong>묵호항 활어회센터</strong> — 신선한 회와 시원한 물회</div>
+                <div class="course-step"><span class="step-badge">오후</span><strong>묵호등대·논골담길 & 도째비골</strong> — 벽화 골목 산책과 스카이워크 체험</div>
+                <div class="course-step"><span class="step-badge">저녁</span><strong>망상 해수욕장</strong> — 해변 숙소 또는 캠핑장에서 바다 휴식</div>
+            </div>
+            <div class="course-card">
+                <h3>2일차: 계곡과 도심 힐링 코스</h3>
+                <div class="course-step"><span class="step-badge">오전</span><strong>무릉계곡 관광지</strong> — 무릉반석과 쌍폭포 트레킹</div>
+                <div class="course-step"><span class="step-badge">점심</span><strong>무릉계곡 입구 향토음식점</strong> — 산채비빔밥과 감자전</div>
+                <div class="course-step"><span class="step-badge">오후</span><strong>무릉별유천지 & 천곡황금박쥐동굴</strong> — 에메랄드 호수 감상과 도심 동굴 탐방</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="info-grid" id="tips">
+        <div class="info-box">
+            <h3>동해시 대표 먹거리</h3>
+            <ul>
+                <li><strong>묵호항 대게 & 활어 물회:</strong> 항구 인근에서 즐기는 싱싱한 수산물 별미</li>
+                <li><strong>동해 해물탕 & 망상 막국수:</strong> 시원한 국물과 사계절 즐기기 좋은 막국수</li>
+                <li><strong>산채비빔밥 & 감자전:</strong> 무릉계곡 주변에서 맛보는 강원도 향토 음식</li>
+            </ul>
+        </div>
+        <div class="info-box">
+            <h3>여행 & GitHub Pages 배포 팁</h3>
+            <ul>
+                <li><strong>로컬 폴더 구조:</strong> <code>index.html</code>과 <code>images/</code> 폴더를 같은 위치에 두고 엽니다.</li>
+                <li><strong>사진 소스 전환:</strong> 상단 버튼으로 <code>images/</code> 로컬 사진과 공개 관광 사진 URL을 전환할 수 있습니다.</li>
+                <li><strong>기차 연계:</strong> 동해역·묵호역과 시내버스 및 택시를 연계하면 편리하게 이동할 수 있습니다.</li>
+            </ul>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>동해시 관광가이드 홈페이지 · <code>index.html</code> + <code>images/</code> 폴더 패키지</p>
+</footer>
+
+<script>
+    const regionMeta = {
+        all: "<strong>전체 권역 안내:</strong> 남쪽의 추암 촛대바위와 서쪽의 무릉계곡·무릉별유천지, 중부의 묵호등대·도째비골 스카이밸리와 천곡황금박쥐동굴, 북쪽의 망상 해수욕장까지 권역 간 이동이 수월합니다.",
+        chuam: "<strong>① 추암권역 (일출·해안절경):</strong> 애국가 첫 소절 배경화면으로 알려진 추암 촛대바위와 추암 출렁다리, 해암정이 어우러진 대표 해돋이 권역입니다.",
+        mureung: "<strong>② 무릉권역 (산·계곡·힐링):</strong> 두타산·청옥산 자락의 무릉계곡과 폐광지를 재탄생시킨 무릉별유천지가 자리한 자연·체험 중심 권역입니다.",
+        mukho: "<strong>③ 묵호권역 (감성·어촌·문화):</strong> 도째비골 스카이밸리와 해랑전망대, 묵호등대, 논골담길 벽화마을이 이어지는 감성 어촌 권역입니다.",
+        cheongok: "<strong>④ 천곡권역 (도심·동굴·산책):</strong> 국내 유일 도심 속 천연 석회암 동굴인 천곡황금박쥐동굴과 한섬해변 산책로를 함께 즐길 수 있습니다.",
+        mangsang: "<strong>⑤ 망상권역 (휴양·해변·캠핑):</strong> 넓은 백사장과 울창한 송림, 망상오토캠핑리조트와 한옥마을 등 체류형 휴양 인프라를 갖춘 권역입니다."
+    };
+
+    const spots = [
+        {
+            region: "chuam",
+            regionLabel: "① 추암권역 · 일출·해안절경",
+            title: "추암 촛대바위 & 출렁다리",
+            desc: "바다 위로 솟아오른 기암괴석과 출렁다리, 해암정이 어우러져 일출과 해안 산책을 즐기기 좋은 명소입니다.",
+            tip: "이른 아침 일출 시간대에 맞춰 방문하면 촛대바위 실루엣과 붉은 바다 풍경을 담기 좋습니다.",
+            localImg: "images/chuam.jpg",
+            webImg: "https://koreabybike.com/wp-content/uploads/2024/06/Gangwon-Bike-Path-Samcheok-and-Donghae-Chuam-Candlestick-Rock-Closeup.jpeg"
+        },
+        {
+            region: "mureung",
+            regionLabel: "② 무릉권역 · 산·계곡·힐링",
+            title: "무릉계곡 관광지",
+            desc: "수백 명이 앉을 수 있는 너른 무릉반석과 쌍폭포·용추폭포가 펼쳐진 두타산·청옥산의 대표 계곡 명승지입니다.",
+            tip: "탐방로 구간별 거리와 소요 시간을 확인한 뒤 편안한 트레킹화로 걸어보세요.",
+            localImg: "images/mureung.jpg",
+            webImg: "https://ak-d.tripcdn.com/images/1mi3v224x991dixf01620.jpg?proc=source/trip"
+        },
+        {
+            region: "mureung",
+            regionLabel: "② 무릉권역 · 산·계곡·힐링",
+            title: "무릉별유천지",
+            desc: "석회석 채광지였던 공간을 에메랄드빛 호수와 정원, 이색 체험 시설로 꾸민 복합 힐링 관광지입니다.",
+            tip: "체험 시설 이용 및 입장 안내는 현장 또는 공식 안내를 미리 확인해 주세요.",
+            localImg: "images/byeolyucheonji.jpg",
+            webImg: "https://tong.visitkorea.or.kr/cms/resource/33/3090633_image2_1.jpg"
+        },
+        {
+            region: "mukho",
+            regionLabel: "③ 묵호권역 · 감성·어촌·문화",
+            title: "묵호등대 · 논골담길 · 도째비골",
+            desc: "1970년대 묵호항의 이야기를 담은 논골담길과 묵호등대, 바다 위 전망을 즐기는 도째비골 스카이밸리가 모여 있습니다.",
+            tip: "골목길 계단과 전망 시설을 함께 둘러보므로 편한 복장을 추천합니다.",
+            localImg: "images/mukho.jpg",
+            webImg: "https://koreabybike.com/wp-content/uploads/2024/06/Gangwon-Bike-Path-Samcheok-and-Donghae-Mukho-Lighthouse-and-Viewing-Platform.jpeg"
+        },
+        {
+            region: "cheongok",
+            regionLabel: "④ 천곡권역 · 도심·동굴·산책",
+            title: "천곡황금박쥐동굴 & 한섬해변",
+            desc: "도심 한복판에서 만나는 천연 석회암 동굴과 인근 한섬해변·한섬감성바닷길 산책 코스를 함께 묶을 수 있습니다.",
+            tip: "동굴 내부는 비교적 선선하므로 계절에 따라 겉옷을 챙기면 좋습니다.",
+            localImg: "images/cheongok.jpg",
+            webImg: "https://tong.visitkorea.or.kr/cms/resource/19/2741919_image2_1.jpg"
+        },
+        {
+            region: "mangsang",
+            regionLabel: "⑤ 망상권역 · 휴양·해변·캠핑",
+            title: "망상 해수욕장 · 오토캠핑 · 한옥마을",
+            desc: "넓고 고운 백사장과 소나무 숲, 캠핑리조트와 한옥 숙박 시설이 어우러진 동해안 대표 휴양지입니다.",
+            tip: "성수기 캠핑 및 숙박 시설은 사전 예약을 권장합니다.",
+            localImg: "images/mangsang.jpg",
+            webImg: "https://tong.visitkorea.or.kr/cms/resource/40/2671440_image2_1.jpg"
+        }
+    ];
+
+    let currentRegion = "all";
+    let useWebImages = false;
+
+    function selectRegion(region) {
+        currentRegion = region;
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.region === region);
+        });
+        document.getElementById("regionBanner").innerHTML = regionMeta[region] || regionMeta.all;
+        renderSpots();
+    }
+
+    function toggleImageSource() {
+        useWebImages = !useWebImages;
+        document.getElementById("sourceToggleBtn").textContent = useWebImages
+            ? "사진: 웹 URL (전환됨)"
+            : "사진: 로컬 images/ 폴더";
+        renderSpots();
+    }
+
+    function renderSpots() {
+        const grid = document.getElementById("spotsGrid");
+        const filtered = currentRegion === "all"
+            ? spots
+            : spots.filter(s => s.region === currentRegion);
+
+        grid.innerHTML = filtered.map(spot => {
+            const primarySrc = useWebImages ? spot.webImg : spot.localImg;
+            const fallbackSrc = useWebImages ? spot.localImg : spot.webImg;
+            return `
+                <article class="spot-card">
+                    <div class="spot-img-wrap">
+                        <img src="${primarySrc}" alt="${spot.title}" onerror="if(this.dataset.fb!=='1'){this.dataset.fb='1';this.src='${fallbackSrc}';}">
+                    </div>
+                    <div class="spot-body">
+                        <div class="spot-region">${spot.regionLabel}</div>
+                        <h3 class="spot-title">${spot.title}</h3>
+                        <p class="spot-desc">${spot.desc}</p>
+                        <div class="spot-tip"><strong>여행 팁:</strong> ${spot.tip}</div>
+                    </div>
+                </article>
+            `;
+        }).join("");
+    }
+
+    function downloadHtml() {
+        const html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "index.html";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    renderSpots();
+</script>
+
+</body>
+</html>
